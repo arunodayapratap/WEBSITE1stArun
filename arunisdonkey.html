@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Animated Car Calculator</title>
+    <!-- Modern font (Montserrat from Google Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Montserrat', Arial, sans-serif;
+            /* Blurred car background -- use a royalty free photo URL */
+            background: url('https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=1500&q=80') no-repeat center center fixed;
+            background-size: cover;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: inherit;
+            filter: blur(8px) brightness(0.7);
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            min-width: 360px;
+            max-width: 400px;
+            margin: 110px auto 0 auto;
+            padding: 44px 30px 32px;
+            border-radius: 18px;
+            background: rgba(255,255,255,0.88);
+            box-shadow: 0 8px 30px rgba(30,30,50,0.15);
+            z-index: 1;
+            animation: popin 1s cubic-bezier(0.4,0.9,0.5,1.15);
+            text-align: center;
+        }
+        @keyframes popin {
+            from {transform: scale(0.86) translateY(40px); opacity: 0;}
+            to   {transform: scale(1) translateY(0); opacity: 1;}
+        }
+        h1 {
+            font-size: 2.3em;
+            color: #179382;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            margin-bottom: 24px;
+            animation: fadein 1.2s;
+        }
+        @keyframes fadein {
+            from { opacity: 0; filter: blur(4px);}
+            to   { opacity: 1; filter: none;}
+        }
+        label {
+            display: block;
+            color: #226399;
+            font-size: 1.13em;
+            margin-bottom: 8px;
+            margin-top: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        input[type="number"] {
+            width: 86%;
+            font-size: 1.18em;
+            border: none;
+            background: #e1e7efc7;
+            border-radius: 7px;
+            padding: 10px 15px;
+            outline: none;
+            transition: box-shadow 0.3s;
+            box-shadow: 0 1px 5px rgba(50,80,120,0.07);
+            font-family: inherit;
+        }
+        input[type="number"]:focus {
+            box-shadow: 0 2px 11px #8cf8eb45;
+            background: #e7fef9c7;
+        }
+        .btn-anim, .profile-btn {
+            display: inline-block;
+            margin: 20px 10px 0 10px;
+            padding: 14px 52px;
+            font-size: 1.08em;
+            font-weight: 700;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            outline: none;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s cubic-bezier(0.22,1,0.36,1), background 0.29s;
+            font-family: 'Montserrat', Arial, sans-serif;
+            box-shadow: 0 4px 25px rgba(93, 230, 30, 0.756);
+        }
+        .btn-anim {
+            color: #fff;
+            background: linear-gradient(90deg, #289911, #38efe9);
+        }
+        .btn-anim:hover, .btn-anim:focus {
+            background: linear-gradient(90deg, #cecc43, #9d1856);
+            transform: translateY(-4px) scale(1.03) rotate(-1deg);
+            box-shadow: 0 8px 40px rgba(24,90,157,0.14);
+        }
+        .btn-anim::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+            z-index: 0;
+        }
+        .btn-anim:active::after {
+            width: 180%;
+            height: 300%;
+            transition: 0s;
+        }
+        .profile-btn {
+            color: #fff;
+            background: linear-gradient(90deg, #24292e, #57606a);
+            box-shadow: 0 4px 15px rgba(36,41,46,0.3);
+        }
+        .profile-btn:hover {
+            background: #2188ff;
+            transform: scale(1.05);
+            box-shadow: 0 6px 28px rgba(33,136,255,0.6);
+        }
+        .result {
+            margin-top: 36px;
+            text-align: center;
+            font-size: 1.43em;
+            color: #196a34;
+            font-weight: bold;
+            background: #e6fcf4;
+            border-radius: 10px;
+            min-height: 40px;
+            padding: 14px 0;
+            opacity: 0;
+            transition: opacity .4s;
+            box-shadow: 0 4px 18px rgba(23, 180, 140, 0.07);
+            letter-spacing: 1px;
+            animation: result-pop .6s;
+        }
+        .result.show {
+            opacity: 1;
+        }
+        @keyframes result-pop {
+            0%   {transform: scale(0.92) translateY(25px); opacity: 0;}
+            60%  {transform: scale(1.09) translateY(-12px); opacity: 0.6;}
+            100% {transform: scale(1) translateY(0); opacity: 1;}
+        }
+        @media (max-width:560px) {
+            .container {
+                margin: 35px 5vw;
+                max-width: 95vw;
+                padding: 30px 10px 20px 10px;
+            }
+            h1 { font-size: 1.7em;}
+            .btn-anim, .profile-btn {
+                width: 100%;
+                margin: 12px 0 0 0;
+                padding: 14px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="profile-btn" onclick="openProfile()">My Profile</button>
+        <h1>Enter 2 Numbers</h1>
+        <label for="N">First Number:</label>
+        <input type="number" id="N" placeholder="First Number">
+        <label for="A">Second Number:</label>
+        <input type="number" id="A" placeholder="Second Number">
+        <button class="btn-anim" onclick="add()">Find Product</button>
+        <div id="productResult" class="result"></div>
+    </div>
+
+    <script>
+        function add() {
+            let num1 = Number(document.getElementById("N").value);
+            let num2 = Number(document.getElementById("A").value);
+            let product = num1 * num2;
+            // Animation for the container
+            document.querySelector('.container').style.animation = 'popin 0.3s';
+            setTimeout(()=> {
+                document.querySelector('.container').style.animation = '';
+            }, 220);
+            // Show result inside the page
+            let resultDiv = document.getElementById("productResult");
+            if (!isNaN(product) && document.getElementById("N").value !== "" && document.getElementById("A").value !== "") {
+                resultDiv.textContent = "Product = " + product;
+                resultDiv.classList.add("show");
+            } else {
+                resultDiv.textContent = "Please enter both numbers.";
+                resultDiv.classList.add("show");
+            }
+        }
+
+        function openProfile() {
+            const profileContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <title>My Profile</title>
+                    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+                    <style>
+                        body {
+                            margin: 0;
+                            min-height: 100vh;
+                            font-family: 'Montserrat', Arial, sans-serif;
+                            background: #e3f5ff;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .profile-card {
+                            background: #fff;
+                            padding: 36px 52px;
+                            border-radius: 16px;
+                            box-shadow: 0 4px 30px rgba(0,60,120,0.13);
+                            text-align: center;
+                            max-width: 380px;
+                        }
+                        .profile-pic {
+                            width: 92px;
+                            height: 92px;
+                            border-radius: 50%;
+                            margin-bottom: 18px;
+                            object-fit: cover;
+                            border: 3px solid #3ebea6;
+                        }
+                        h2 {
+                            margin-top: 0;
+                            color: #145e67;
+                            margin-bottom: 5px;
+                            font-weight: 700;
+                        }
+                        p {
+                            color: #246b77;
+                            letter-spacing: .2px;
+                            font-size: 1.09em;
+                        }
+                        a.github-link {
+                            display: inline-block;
+                            margin-top: 18px;
+                            padding: 10px 16px;
+                            background: #24292e;
+                            color: #fff;
+                            font-weight: 700;
+                            text-decoration: none;
+                            border-radius: 14px;
+                            transition: background 0.3s ease;
+                        }
+                        a.github-link:hover {
+                            background: #2188ff;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="profile-card">
+                        <img src="https://avatars.githubusercontent.com/u/29314359?v=4" alt="Profile Picture" class="profile-pic" />
+                        <h2>Arunodaya Pratap</h2>
+                        <p>Web Developer &amp; Car Enthusiast</p>
+                        <p>Email: arunodayapratap@email.com</p>
+                        <a href="https://github.com/arunodayapratap/yuvraj1stweb" target="_blank" rel="noopener" class="github-link">View My GitHub Profile</a>
+                    </div>
+                </body>
+                </html>
+            `;
+            let profileWindow = window.open("", "_blank", "width=420,height=520");
+            profileWindow.document.write(profileContent);
+            profileWindow.document.close();
+        }
+    </script>
+</body>
+</html>
